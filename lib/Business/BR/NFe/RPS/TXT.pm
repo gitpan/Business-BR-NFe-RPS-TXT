@@ -5,60 +5,6 @@ use Moose::Util::TypeConstraints;
 use namespace::autoclean;
 use Carp;
 
-# ABSTRACT: Gerar arquivo de envio de RPS em lote baseado no sistema de nota fiscal paulistana.
-
-=head1 SYNOPSIS
-
-    my $txt = new Business::BR::NFe::RPS::TXT(
-        data_ini => '20120202',
-        data_fim => '20120204',
-        inscricao_municipal => '12345667',
-    );
-
-    $txt->adiciona_rps(
-        serie  => '011',
-        numero => '00',
-        emissao => '20121222',
-        situacao => '0',
-        valor_servico => 2400.34,
-        valor_deducao => 140.45,
-        codigo_servico => '00',
-        aliquota => '00',
-        iss_retido => '1',
-        cpf_cnpj_flag => '1',
-        cpf_cnpj      => '00',
-        inscricao_municipal => '00',
-        inscricao_estadual => '00',
-        razao_social => '00',
-        endereco_tipo => '00',
-        endereco => '00',
-        endereco_num => '00',
-        endereco_complemento => '00',
-        endereco_bairro => '00',
-        endereco_cidade => '00',
-        endereco_uf => '00',
-        endereco_cep => '00',
-        email => '00',
-        discriminacao => '00',
-    );
-
-    $txt->gerar_txt;
-
-=head1 DESCRIPTION
-
-O sistema da Nota Fiscal Paulistana permite que sejam transferidas informações dos contribuintes para a  Prefeitura em arquivos no formato texto. Tais arquivos devem atender a um layout pré-definido, apresentado em http://nfpaulistana.prefeitura.sp.gov.br/arquivos/manual/NFe_Layout_RPS.pdf
-
-=head1 TODO
-
-=over 4
-
-=item * Limitar os dados em 10MB.
-
-=item * Adicionar suporte para RPS-C = Recibo Provisório de Serviços simplificado (Cupons).
-
-=back
-
-=cut
 
 subtype 'DataRps', as 'Str',
   where { /^[1-2][0-9][0-9][0-9][0-1][0-9][0-3][0-9]$/ },
@@ -151,11 +97,6 @@ sub _pad_num {
     }
 }
 
-=method adiciona_rps
-
-Adicionar informações sobre um RPS. Verificar a SYNOPSIS para exemplo.
-
-=cut
 
 sub adiciona_rps {
     my ( $self, %params ) = @_;
@@ -304,11 +245,6 @@ sub _formata {
     return $x;
 }
 
-=method gerar_txt
-
-Retorna o conteúdo para ser gravado em um arquivo.
-
-=cut
 
 sub gerar_txt {
     my ($self) = @_;
@@ -340,5 +276,121 @@ sub gerar_txt {
     return $str;
 }
 
-1
+1;
 
+__END__
+
+=pod
+
+=head1 NAME
+
+Business::BR::NFe::RPS::TXT
+
+=head1 VERSION
+
+version 0.012
+
+=head1 SYNOPSIS
+
+    my $txt = new Business::BR::NFe::RPS::TXT(
+        data_ini => '20120202',
+        data_fim => '20120204',
+        inscricao_municipal => '12345667',
+    );
+
+    $txt->adiciona_rps(
+        serie  => '011',
+        numero => '00',
+        emissao => '20121222',
+        situacao => '0',
+        valor_servico => 2400.34,
+        valor_deducao => 140.45,
+        codigo_servico => '00',
+        aliquota => '00',
+        iss_retido => '1',
+        cpf_cnpj_flag => '1',
+        cpf_cnpj      => '00',
+        inscricao_municipal => '00',
+        inscricao_estadual => '00',
+        razao_social => '00',
+        endereco_tipo => '00',
+        endereco => '00',
+        endereco_num => '00',
+        endereco_complemento => '00',
+        endereco_bairro => '00',
+        endereco_cidade => '00',
+        endereco_uf => '00',
+        endereco_cep => '00',
+        email => '00',
+        discriminacao => '00',
+    );
+
+    $txt->gerar_txt;
+
+=head1 DESCRIPTION
+
+O sistema da Nota Fiscal Paulistana permite que sejam transferidas informações dos contribuintes para a  Prefeitura em arquivos no formato texto. Tais arquivos devem atender a um layout pré-definido, apresentado em http://nfpaulistana.prefeitura.sp.gov.br/arquivos/manual/NFe_Layout_RPS.pdf
+
+=head1 METHODS
+
+=head2 adiciona_rps
+
+Adicionar informações sobre um RPS. Verificar a SYNOPSIS para exemplo.
+
+=head2 gerar_txt
+
+Retorna o conteúdo para ser gravado em um arquivo.
+
+Atenção: O arquivo deve ser salvo em ISO 8859-1,
+este modulo não modifica nenhum campo enviado além de ajustar os paddings.
+
+=head1 NAME
+
+=UTF8
+
+Business::BR::NFe::RPS::TXT - Gerar arquivo de envio de RPS em lote baseado no sistema de nota fiscal paulistana.
+
+Formato do arquivo na versao TXT 001.
+
+=head1 TODO
+
+=over 4
+
+=item *
+
+Limitar os dados em 10MB.
+
+=item *
+
+Adicionar suporte para RPS-C = Recibo Provisório de Serviços simplificado (Cupons).
+
+=back
+
+=head1 SUPPORT
+
+=head2 Perldoc
+
+Você pode encontrar documentação para este módulo com o comando perldoc (para ler)
+
+    perldoc Business::BR::NFe::RPS::TXT
+
+=head2 Github
+
+Se você quiser contribuir com o código, você pode fazer um fork deste módulo no github:
+
+L<https://github.com/renatoaware/perl-business-br-nfe-txt>
+
+Você também pode reportar problemas por lá!
+
+=head1 AUTHOR
+
+Renato Cron <renato@aware.com.br>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2012 by Aware TI <http://www.aware.com.br>.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
