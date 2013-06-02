@@ -288,7 +288,7 @@ Business::BR::NFe::RPS::TXT
 
 =head1 VERSION
 
-version 0.012
+version 0.0121
 
 =head1 SYNOPSIS
 
